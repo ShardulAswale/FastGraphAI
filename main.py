@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI, Request, Query
+from fastapi.responses import HTMLResponse,JSONResponse, PlainTextResponse
 from pydantic import BaseModel
 from graph import run_graph
 
@@ -16,6 +16,42 @@ def read_root():
 async def chat(request: ChatRequest):
     response = run_graph(request.message)
     return {"response": response}
+
+from fastapi import Request, Query
+from fastapi.responses import JSONResponse, PlainTextResponse
+
+@app.get(
+    "/chat",
+    response_class=PlainTextResponse,
+    responses={
+        200: {
+            "content": {
+                "text/plain": {
+                    "example": "It's 24°C and sunny ☀️"
+                },
+                "application/json": {
+                    "example": {
+                        "response": "It's 24°C and sunny ☀️"
+                    }
+                }
+            },
+            "description": "Returns a response as plain text or JSON based on Accept header",
+        }
+    }
+)
+def chat_get(
+    request: Request,
+    message: str = Query(..., description="Your input message")
+):
+    response = run_graph(message)
+
+    accept = request.headers.get("accept", "")
+    if "application/json" in accept:
+        return JSONResponse(content={"response": response})
+    else:
+        return PlainTextResponse(content=response)
+
+
 
 @app.get("/ui", response_class=HTMLResponse)
 def chat_ui():
