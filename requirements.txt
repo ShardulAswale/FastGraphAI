@@ -2,3 +2,6 @@ streamlit
 requests
 fastapi
 uvicorn
+dotenv
+openai
+python-dotenv
