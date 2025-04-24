@@ -2,16 +2,29 @@ import subprocess
 import time
 
 services = {
-    "LangChain Echo Bot": ["streamlit", "run", "langchain+streamlit/main.py", "--server.port=8501"],
-    "LangChain + Together.ai": ["streamlit", "run", "langchain+openai/main.py", "--server.port=8502"],
-    "LLM Dashboard": ["streamlit", "run", "dashboard.py", "--server.port=8503"]
+    "Dashboard (8501)": [
+        "streamlit", "run", "dashboard.py", "--server.port=8501"
+    ],
+    "Together AI (8502)": [
+        "streamlit", "run", "Together_AI_Chatbot/main.py", "--server.port=8502"
+    ],
+    "Together AI + Streaming (8503)": [
+        "streamlit", "run", "Together_AI_(Streaming)/main.py", "--server.port=8503"
+    ],
+    "LangGraph + TogetherAI (8504)": [
+        "streamlit", "run", "LangChain_Chat/main.py", "--server.port=8504"
+    ],
+    "Echo Bot (8505)": [
+        "streamlit", "run", "Echo_Bot/main.py", "--server.port=8505"
+    ]
 }
 
-print("🚀 Launching free LLM services...")
+print("🚀 Starting all services...")
 
 for name, cmd in services.items():
-    print(f"🔹 Starting {name}")
+    print(f"🔹 {name}")
     subprocess.Popen(cmd)
     time.sleep(1)
 
-print("✅ All services launched. Visit http://localhost:8503")
+print("\n✅ All services are running!")
+print("Open your dashboard at http://localhost:8501")

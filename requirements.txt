@@ -1,7 +1,4 @@
 streamlit
-requests
-fastapi
-uvicorn
-dotenv
-openai
+langchain
+langchain-openai
 python-dotenv
