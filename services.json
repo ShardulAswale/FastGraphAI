@@ -1,5 +1,0 @@
-{
-  "LangChain (Echo)": "http://localhost:8501/chat",
-  "LangChain + OpenAI": "http://localhost:8502/chat",
-  "LangGraph + OpenAI": "http://localhost:8503/chat"
-}
