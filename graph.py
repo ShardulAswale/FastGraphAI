@@ -1,64 +1,28 @@
 from langgraph.graph import StateGraph, END
-from typing import TypedDict, Literal
+from chain import llm
+from pydantic import BaseModel
 
-# State type
-class State(TypedDict):
+class MyState(BaseModel):
     input: str
-    output: str
-    type: Literal["weather", "time", "unknown"]
+    output: str = ""
 
-# Node 1: Classifier
-def classify_node(state: State) -> State:
-    input_text = state["input"].lower()
-    if "weather" in input_text:
-        state["type"] = "weather"
-    elif "time" in input_text:
-        state["type"] = "time"
+def llm_node(state):
+    if isinstance(state, dict):
+        msg = state["input"]
     else:
-        state["type"] = "unknown"
+        msg = state.input
+    reply = llm.invoke(msg)
+    if isinstance(state, dict):
+        state["output"] = reply.content
+    else:
+        state.output = reply.content
     return state
 
-# Node 2: Weather
-def weather_node(state: State) -> State:
-    state["output"] = "It's 24°C and sunny ☀️"
-    return state
-
-# Node 3: Time
-def time_node(state: State) -> State:
-    state["output"] = "It's 2:00 PM 🕑"
-    return state
-
-# Fallback Node
-def fallback_node(state: State) -> State:
-    state["output"] = f"You said: {state['input']}"
-    return state
-
-# Define graph
-builder = StateGraph(State)
-builder.add_node("classify", classify_node)
-builder.add_node("weather", weather_node)
-builder.add_node("time", time_node)
-builder.add_node("fallback", fallback_node)
-
-# Routes
-builder.set_entry_point("classify")
-builder.add_conditional_edges(
-    "classify",
-    lambda state: state["type"],
-    {
-        "weather": "weather",
-        "time": "time",
-        "unknown": "fallback"
-    }
-)
-
-builder.add_edge("weather", END)
-builder.add_edge("time", END)
-builder.add_edge("fallback", END)
-
-graph = builder.compile()
-
-# Run the graph
-def run_graph(user_input: str) -> str:
-    result = graph.invoke({"input": user_input})
-    return result["output"]
+def run_langgraph(message: str) -> str:
+    workflow = StateGraph(state_schema=MyState)
+    workflow.add_node("llm", llm_node)
+    workflow.set_entry_point("llm")
+    workflow.add_edge("llm", END)
+    graph = workflow.compile()
+    final_state = graph.invoke({"input": message})
+    return final_state["output"]

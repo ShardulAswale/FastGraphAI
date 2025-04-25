@@ -1,24 +1,43 @@
-# LangServe
+# LLM Multi-Agent Chat Platform
 
-A minimal project using FastAPI and LangGraph with auto-deploy via GitHub Actions.
+A full-stack, production-ready AI chatbot system using FastAPI, LangChain, LangGraph, and Streamlit.
 
-## 🚀 Run Locally
-```bash
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
+---
 
-Visit `http://127.0.0.1:8000/docs`
+## 🚀 Overview
 
-## 🌍 Deploy on Render
-1. Push this project to GitHub
-2. Go to [Render.com](https://render.com/)
-3. New → Web Service → Connect repo
-4. Set:
-   - Build: `pip install -r requirements.txt`
-   - Start: `uvicorn main:app --host 0.0.0.0 --port 10000`
+This project is organized into **two separate branches** for maximum modularity and deployment flexibility:
 
-## 🔁 GitHub Actions Deployment
-- Get your **Deploy Hook** URL from Render
-- Add it as a GitHub secret: `RENDER_DEPLOY_HOOK`
-- Push to `main` and it auto-deploys!
+- **backend:**  
+  FastAPI-based API with endpoints for both LangChain and LangGraph LLM workflows.
+
+- **frontend:**  
+  Streamlit-based UI for interactive chat, with engine selection and conversation history.
+
+---
+
+## 🗂️ Branches
+
+| Branch    | Purpose                                   | Main Technologies                |
+|-----------|-------------------------------------------|----------------------------------|
+| backend   | REST API with LangChain & LangGraph logic | FastAPI, LangChain, LangGraph    |
+| frontend  | Chat UI with engine selection             | Streamlit, Python requests       |
+
+Each branch has its own README.md with setup instructions.
+
+---
+
+## 🏗️ How to Use
+
+1. **Clone the repo and switch to your desired branch:**
+
+   ```bash
+   # For backend (API)
+   git clone <repo_url> -b backend backend
+   cd backend
+   # (See backend/README.md for full setup)
+
+   # For frontend (UI)
+   git clone <repo_url> -b frontend frontend
+   cd frontend
+   # (See frontend/README.md for full setup)

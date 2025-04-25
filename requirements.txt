@@ -1,7 +1,6 @@
-streamlit
-requests
 fastapi
 uvicorn
-dotenv
-openai
+langchain
+langchain-openai
+langgraph
 python-dotenv
