@@ -1,43 +1,72 @@
-# LLM Multi-Agent Chat Platform
+# FastGraphAI
 
-A full-stack, production-ready AI chatbot system using FastAPI, LangChain, LangGraph, and Streamlit.
+A Python LLM chat project comparing **LangChain** model calls with **LangGraph** workflow orchestration, exposed through **FastAPI** and a **Streamlit** interface.
 
----
+## What it demonstrates
 
-## 🚀 Overview
+- Typed request and response schemas with Pydantic.
+- Separate API routes for LangChain and LangGraph.
+- OpenAI-compatible model integration using Together.ai in the checked-in backend.
+- A Streamlit interface with engine selection and session conversation history.
+- Separation of API and interface code across branches.
 
-This project is organized into **two separate branches** for maximum modularity and deployment flexibility:
+The current graph is a single LLM node. This repository is a learning and portfolio project; the checked-in implementation does not establish a production-ready multi-agent system.
 
-- **backend:**  
-  FastAPI-based API with endpoints for both LangChain and LangGraph LLM workflows.
+## Find the implementation
 
-- **frontend:**  
-  Streamlit-based UI for interactive chat, with engine selection and conversation history.
+| Branch | Contents |
+| --- | --- |
+| [ChatBot_V3_Backend](https://github.com/ShardulAswale/FastGraphAI/tree/ChatBot_V3_Backend) | FastAPI service, LangChain call, LangGraph workflow and dependency list |
+| [ChatBot_V3_Frontend](https://github.com/ShardulAswale/FastGraphAI/tree/ChatBot_V3_Frontend) | Streamlit chat interface |
+| [main](https://github.com/ShardulAswale/FastGraphAI/tree/main) | Initial API implementation and this overview |
+| [LangGraph-Workflow](https://github.com/ShardulAswale/FastGraphAI/tree/LangGraph-Workflow) | Separate workflow experiments |
 
----
+## Run the backend
 
-## 🗂️ Branches
+```bash
+git clone --branch ChatBot_V3_Backend https://github.com/ShardulAswale/FastGraphAI.git fastgraphai-backend
+cd fastgraphai-backend
+python -m venv .venv
+# Linux/macOS: source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+```
 
-| Branch    | Purpose                                   | Main Technologies                |
-|-----------|-------------------------------------------|----------------------------------|
-| backend   | REST API with LangChain & LangGraph logic | FastAPI, LangChain, LangGraph    |
-| frontend  | Chat UI with engine selection             | Streamlit, Python requests       |
+Set `TOGETHER_API_KEY` in your local environment or a local `.env` file, then run:
 
-Each branch has its own README.md with setup instructions.
+```bash
+python -m uvicorn app:app --reload --port 8000
+```
 
----
+Explore the API at `http://localhost:8000/docs`.
 
-## 🏗️ How to Use
+| Route | Method | Request |
+| --- | --- | --- |
+| /chat/chain | POST | `{"message": "Explain retrieval-augmented generation"}` |
+| /chat/graph | POST | Same schema |
 
-1. **Clone the repo and switch to your desired branch:**
+Both routes return `{"response": "..."}`.
 
-   ```bash
-   # For backend (API)
-   git clone <repo_url> -b backend backend
-   cd backend
-   # (See backend/README.md for full setup)
+## Run the interface
 
-   # For frontend (UI)
-   git clone <repo_url> -b frontend frontend
-   cd frontend
-   # (See frontend/README.md for full setup)
+In a separate folder and terminal:
+
+```bash
+git clone --branch ChatBot_V3_Frontend https://github.com/ShardulAswale/FastGraphAI.git fastgraphai-frontend
+cd fastgraphai-frontend
+python -m venv .venv
+# Activate the virtual environment as above.
+python -m pip install -r requirements.txt requests
+```
+
+Set `BACKEND_URL=http://localhost:8000` in a local `.env` file, then run:
+
+```bash
+python -m streamlit run app.py
+```
+
+The frontend makes Python HTTP requests to the backend. Its default URL should be overridden for your own environment.
+
+## Project scope
+
+This implementation demonstrates LLM API integration and workflow structure. Authentication, rate limiting, persistent chat history, automated evaluation and comprehensive deployment hardening are future work. Model calls may incur provider charges. Keep real API keys out of commits.
