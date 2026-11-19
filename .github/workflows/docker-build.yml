@@ -1,0 +1,23 @@
+name: Docker Build
+
+on:
+  push:
+    branches:
+      - ChatBot_V3_Backend
+  pull_request:
+    branches:
+      - ChatBot_V3_Backend
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t fastgraphai:test .
+
+      - name: Verify image exists
+        run: docker image inspect fastgraphai:test
