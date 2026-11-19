@@ -1,0 +1,23 @@
+name: Verify FastGraphAI Docker
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out containerised backend
+        uses: actions/checkout@v4
+        with:
+          ref: ChatBot_V3_Backend
+
+      - name: Build FastGraphAI Docker image
+        run: docker build -t fastgraphai:test .
+
+      - name: Verify image exists
+        run: docker image inspect fastgraphai:test
